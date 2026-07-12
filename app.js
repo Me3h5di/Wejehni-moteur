@@ -192,13 +192,32 @@ form.addEventListener("submit", (e) => {
 
   const texte = [...motsSelectionnes].join(", ");
   const bac = document.getElementById("bac").value || null;
+  const moyenneInput = document.getElementById("moyenne-bac").value;
+  const moyenneUtilisateur =
+    moyenneInput !== "" ? parseFloat(moyenneInput) : null;
 
   const resultats = moteur.recommander(texte, { serieBac: bac, topN: 6 });
-  afficherResultats(resultats, [...motsSelectionnes]);
+  afficherResultats(resultats, [...motsSelectionnes], moyenneUtilisateur);
   resultatsSection.scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
-function afficherResultats(resultats, motsChoisis) {
+// Marge de tolérance : on ne considère qu'un écart de plus de 1.5 point
+// entre le moyenne de l'utilisateur et le moyenne indicative d'orientation
+// mérite un avertissement (pour éviter d'alarmer pour un écart négligeable).
+const MARGE_TOLERANCE_MOYENNE = 1.5;
+
+// La moyenne indicative peut être stockée sous différents formats dans data.js
+// (nombre, "14/20", "≈ 13.5", "à partir de 12", etc.) : on extrait la première
+// valeur numérique décimale trouvée, sans rien supposer de plus sur le format.
+function extraireMoyenneRequise(valeur) {
+  if (valeur === null || valeur === undefined) return null;
+  if (typeof valeur === "number") return valeur;
+  const match = String(valeur).match(/(\d+([.,]\d+)?)/);
+  if (!match) return null;
+  return parseFloat(match[1].replace(",", "."));
+}
+
+function afficherResultats(resultats, motsChoisis, moyenneUtilisateur) {
   etatVide.hidden = true;
   resultatsSection.hidden = false;
   resultatsListe.innerHTML = "";
@@ -217,7 +236,9 @@ function afficherResultats(resultats, motsChoisis) {
   resultatsTitre.textContent = `${resultats.length} تخصصات مقترحة لك`;
   resultatsSousTitre.textContent = `بناءً على: ${motsChoisis.join(" · ")}`;
 
-  resultats.forEach((r) => resultatsListe.appendChild(construireCarte(r)));
+  resultats.forEach((r) =>
+    resultatsListe.appendChild(construireCarte(r, moyenneUtilisateur)),
+  );
 }
 
 // --- Détail des masters/spécialisations (priorité : des spécialités claires,
@@ -564,7 +585,7 @@ function construireBlocMaster(sp) {
   return bloc;
 }
 
-function construireCarte(r) {
+function construireCarte(r, moyenneUtilisateur) {
   const node = tplCarte.content.cloneNode(true);
   const carte = node.querySelector(".carte");
   const sp = r.specialite;
@@ -574,6 +595,26 @@ function construireCarte(r) {
   node.querySelector(".carte__score").textContent =
     `التوافق ${Math.round(r.scoreFinal)}/100`;
   node.querySelector(".carte__desc").textContent = sp.description;
+
+  // --- Avertissement de moyenne ---
+  const moyenneRequise = extraireMoyenneRequise(
+    sp.moyenne_indicative_orientation,
+  );
+  if (
+    moyenneUtilisateur !== null &&
+    !Number.isNaN(moyenneUtilisateur) &&
+    moyenneRequise !== null &&
+    moyenneUtilisateur < moyenneRequise - MARGE_TOLERANCE_MOYENNE
+  ) {
+    carte.classList.add("carte--alerte");
+    const alerte = document.createElement("div");
+    alerte.className = "carte__alerte-moyenne";
+    alerte.innerHTML = `
+      <span class="carte__alerte-icone">⚠</span>
+      <span>معدلك (${moyenneUtilisateur.toFixed(2)}) أقل من المعدل التوجيهي المعتاد لهذا التخصص (${moyenneRequise.toFixed(2)} تقريباً) — قد يكون القبول صعباً، لكن يبقى الأمر إرشادياً وقد يختلف حسب السنة والمقاعد المتاحة.</span>
+    `;
+    node.querySelector(".carte__entete").after(alerte);
+  }
 
   const chips = node.querySelector(".carte__chips");
   r.motsClesTrouves.slice(0, 5).forEach((m) => {

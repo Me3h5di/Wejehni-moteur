@@ -36,6 +36,7 @@
 
 <section class="hero">
   <div class="hero__shape" aria-hidden="true"></div>
+  <div class="hero__logo-mark" aria-hidden="true"></div>
   <div class="hero__content">
     <p class="eyebrow">موتور البحث عن التخصص</p>
     <h1>اختر ما يعبّر عنك،<br><span>وجهني</span> يقترح عليك التخصص المناسب</h1>
@@ -83,6 +84,10 @@
           <option value="Lettres et Philosophie">آداب وفلسفة</option>
           <option value="Langues étrangères">لغات أجنبية</option>
         </select>
+      </div>
+      <div class="field">
+        <label for="moyenne-bac">معدلك في البكالوريا (اختياري)</label>
+        <input type="number" id="moyenne-bac" min="0" max="20" step="0.01" inputmode="decimal" placeholder="مثال: 13.50">
       </div>
       <button type="submit" class="btn btn--primary" id="btn-chercher" disabled>
         <i class="icon-search" aria-hidden="true"></i> ابحث عن تخصصي
