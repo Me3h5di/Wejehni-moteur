@@ -81,9 +81,9 @@ h1, h2, h3, p { margin: 0; }
 /* ---------- Hero ---------- */
 .hero {
   position: relative;
+  overflow: hidden;
   background: linear-gradient(160deg, var(--purple-900), var(--purple-700));
   padding: 56px 6vw 90px;
-  overflow: hidden;
 }
 .hero__shape {
   position: absolute;
@@ -92,6 +92,41 @@ h1, h2, h3, p { margin: 0; }
     radial-gradient(circle at 85% 15%, rgba(245,166,35,0.14) 0, transparent 40%),
     radial-gradient(circle at 8% 80%, rgba(31,174,122,0.14) 0, transparent 35%);
   pointer-events: none;
+}
+
+/* Large, soft watermark of the wejehni mark, bleeding off the hero's edge —
+   tone-on-tone so it reads as texture, never competing with the text on top. */
+.hero__logo-mark {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.hero__logo-mark::before {
+  content: "";
+  position: absolute;
+  width: 780px;
+  height: 634px;
+  right: -170px;
+  bottom: -160px;
+  background: url("logo-mono.svg") no-repeat center / contain;
+  opacity: 0.07;
+  transform: rotate(-8deg);
+}
+.hero__logo-mark::after {
+  content: "";
+  position: absolute;
+  width: 320px;
+  height: 260px;
+  left: -60px;
+  top: -40px;
+  background: url("logo-mono.svg") no-repeat center / contain;
+  opacity: 0.05;
+  transform: rotate(16deg);
+}
+@media (max-width: 640px) {
+  .hero__logo-mark::before { width: 480px; height: 390px; right: -120px; bottom: -100px; }
+  .hero__logo-mark::after { display: none; }
 }
 .hero__content { position: relative; max-width: 720px; margin: 0 auto; text-align: center; }
 .eyebrow {
@@ -464,6 +499,31 @@ h1, h2, h3, p { margin: 0; }
 }
 .metier__titre { font-size: 12.5px; font-weight: 700; color: var(--purple-900); margin-bottom: 3px; }
 .metier__desc { font-size: 11.5px; color: var(--ink-soft); line-height: 1.55; }
+
+/* ---------- Moyenne warning ---------- */
+.carte--alerte {
+  border-inline-start: 4px solid var(--coral);
+}
+.carte__alerte-moyenne {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: #FCEFEC;
+  border: 1px solid rgba(226, 64, 47, 0.25);
+  color: #8C2C20;
+  font-size: 12.5px;
+  line-height: 1.7;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  margin-top: 12px;
+}
+.carte__alerte-icone {
+  color: var(--coral);
+  font-size: 15px;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
 
 /* ---------- Master's programs block ---------- */
 .master-bloc {
