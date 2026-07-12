@@ -21,7 +21,7 @@ const SPECIALITES_DATA = [
       "7 ans (6 ans + année d'internat) puis 4-5 ans de résidanat",
     filieres_bac_recommandees: ["Sciences Expérimentales", "Mathématiques"],
     moyenne_indicative_orientation:
-      "≈16/20 (classement national, seuil définitif variable chaque année)",
+      "≈16/20 (seuil ministériel), mais admission réelle par classement national ≈16,6/20 en 2025 — seuil variable chaque année",
     type_etablissement: "Faculté de Médecine (Université)",
     parcours_master_ou_specialisation:
       "Résidanat (Cardio, Pédiatrie, Radiologie, Chirurgie, Anesthésie)",
@@ -73,7 +73,7 @@ const SPECIALITES_DATA = [
     duree_totale_indicative: "5 ans + résidanat optionnel (2-4 ans)",
     filieres_bac_recommandees: ["Sciences Expérimentales", "Mathématiques"],
     moyenne_indicative_orientation:
-      "≈14-16/20 selon l'université (classement national)",
+      "≈16/20 dans la plupart des universités (≈14/20 à l'Université des Sciences de la Santé d'Alger) ; admission réelle par classement ≈15,8-16,3/20 en 2024-2025",
     type_etablissement: "Faculté de Médecine / Sciences de la Santé",
     parcours_master_ou_specialisation:
       "Résidanat (Pharmacie Industrielle, Biologie Médicale, Toxicologie, Pharmacie Galénique)",
@@ -125,7 +125,8 @@ const SPECIALITES_DATA = [
     systeme_universitaire: "Classique (études intégrées)",
     duree_totale_indicative: "6 ans + résidanat (2-4 ans)",
     filieres_bac_recommandees: ["Sciences Expérimentales", "Mathématiques"],
-    moyenne_indicative_orientation: "≈14-16/20 selon l'université",
+    moyenne_indicative_orientation:
+      "≈16/20 dans la plupart des universités (≈14/20 à l'Université des Sciences de la Santé d'Alger) ; admission réelle par classement ≈16,7/20 en 2025",
     type_etablissement: "Faculté de Médecine",
     parcours_master_ou_specialisation:
       "Résidanat (Orthodontie, Parodontologie, Prothèse dentaire, Chirurgie Buccale)",
@@ -181,7 +182,7 @@ const SPECIALITES_DATA = [
       "Techniques Mathématiques",
     ],
     moyenne_indicative_orientation:
-      "≈14,5/20 (Sciences Exp./Maths) à 15/20 (Techn-Maths)",
+      "≈14,5/20 (École Nationale Supérieure Vétérinaire d'Alger, Sciences Exp./Maths et Techn-Maths)",
     type_etablissement: "École Nationale Supérieure Vétérinaire",
     parcours_master_ou_specialisation:
       "Post-Graduation (Clinique, Pathologies Ruminants, Hygiène et Contrôle des Denrées - HIDA)",
@@ -787,7 +788,7 @@ const SPECIALITES_DATA = [
       "Techniques Mathématiques",
     ],
     moyenne_indicative_orientation:
-      "Variable : ≈10-13/20 en université classique, jusqu'à 16-17/20 dans les grandes écoles (ex. pôle Sidi Abdallah pour IA/Cybersécurité/Maths)",
+      "Variable : ≈10-13/20 en université classique ; ≈16-17/20 pour les écoles nationales spécialisées (Technologies Avancées, Systèmes Autonomes, Nanosciences) ; ≈17/20 minimum (jusqu'à ≈18,5/20 en pratique) pour les écoles d'excellence IA/Cybersécurité/Informatique du pôle Sidi Abdallah",
     type_etablissement:
       "Université (Faculté de Technologie) ou École Nationale Supérieure",
     parcours_master_ou_specialisation:
@@ -841,7 +842,7 @@ const SPECIALITES_DATA = [
       "Techniques Mathématiques",
     ],
     moyenne_indicative_orientation:
-      "Variable : ≈10-13/20 en université classique, jusqu'à 16-17/20 dans les grandes écoles (ex. pôle Sidi Abdallah pour IA/Cybersécurité/Maths)",
+      "Variable : ≈10-13/20 en université classique ; ≈16-17/20 pour les écoles nationales spécialisées (Technologies Avancées, Systèmes Autonomes, Nanosciences) ; ≈17/20 minimum (jusqu'à ≈18,5/20 en pratique) pour les écoles d'excellence IA/Cybersécurité/Informatique du pôle Sidi Abdallah",
     type_etablissement:
       "Université (Faculté de Technologie) ou École Nationale Supérieure",
     parcours_master_ou_specialisation:
@@ -896,7 +897,7 @@ const SPECIALITES_DATA = [
       "Techniques Mathématiques",
     ],
     moyenne_indicative_orientation:
-      "Variable : ≈10-13/20 en université classique, jusqu'à 16-17/20 dans les grandes écoles (ex. pôle Sidi Abdallah pour IA/Cybersécurité/Maths)",
+      "Variable : ≈10-13/20 en université classique ; ≈16-17/20 pour les écoles nationales spécialisées (Technologies Avancées, Systèmes Autonomes, Nanosciences) ; ≈17/20 minimum (jusqu'à ≈18,5/20 en pratique) pour les écoles d'excellence IA/Cybersécurité/Informatique du pôle Sidi Abdallah",
     type_etablissement:
       "Université (Faculté de Technologie) ou École Nationale Supérieure",
     parcours_master_ou_specialisation:
@@ -950,7 +951,7 @@ const SPECIALITES_DATA = [
       "Techniques Mathématiques",
     ],
     moyenne_indicative_orientation:
-      "Variable : ≈10-13/20 en université classique, jusqu'à 16-17/20 dans les grandes écoles (ex. pôle Sidi Abdallah pour IA/Cybersécurité/Maths)",
+      "Variable : ≈10-13/20 en université classique ; ≈16-17/20 pour les écoles nationales spécialisées (Technologies Avancées, Systèmes Autonomes, Nanosciences) ; ≈17/20 minimum (jusqu'à ≈18,5/20 en pratique) pour les écoles d'excellence IA/Cybersécurité/Informatique du pôle Sidi Abdallah",
     type_etablissement:
       "Université (Faculté de Technologie) ou École Nationale Supérieure",
     parcours_master_ou_specialisation:
@@ -1005,7 +1006,7 @@ const SPECIALITES_DATA = [
       "Techniques Mathématiques",
     ],
     moyenne_indicative_orientation:
-      "Variable : ≈10-13/20 en université classique, jusqu'à 16-17/20 dans les grandes écoles (ex. pôle Sidi Abdallah pour IA/Cybersécurité/Maths)",
+      "Variable : ≈10-13/20 en université classique ; ≈16-17/20 pour les écoles nationales spécialisées (Technologies Avancées, Systèmes Autonomes, Nanosciences) ; ≈17/20 minimum (jusqu'à ≈18,5/20 en pratique) pour les écoles d'excellence IA/Cybersécurité/Informatique du pôle Sidi Abdallah",
     type_etablissement:
       "Université (Faculté de Technologie) ou École Nationale Supérieure",
     parcours_master_ou_specialisation:
@@ -1059,7 +1060,7 @@ const SPECIALITES_DATA = [
       "Techniques Mathématiques",
     ],
     moyenne_indicative_orientation:
-      "Variable : ≈10-13/20 en université classique, jusqu'à 16-17/20 dans les grandes écoles (ex. pôle Sidi Abdallah pour IA/Cybersécurité/Maths)",
+      "Variable : ≈10-13/20 en université classique ; ≈16-17/20 pour les écoles nationales spécialisées (Technologies Avancées, Systèmes Autonomes, Nanosciences) ; ≈17/20 minimum (jusqu'à ≈18,5/20 en pratique) pour les écoles d'excellence IA/Cybersécurité/Informatique du pôle Sidi Abdallah",
     type_etablissement:
       "Université (Faculté de Technologie) ou École Nationale Supérieure",
     parcours_master_ou_specialisation:
@@ -1113,7 +1114,7 @@ const SPECIALITES_DATA = [
       "Techniques Mathématiques",
     ],
     moyenne_indicative_orientation:
-      "≈17/20 à l'École Nationale Supérieure d'Intelligence Artificielle (Sidi Abdallah) ; sinon ≈10-13/20 en Licence/Master Data Science classique",
+      "≈17/20 minimum à l'École Supérieure d'Intelligence Artificielle (Sidi Abdallah) ; admission réelle ≈18,6/20 en 2025 ; sinon ≈10-13/20 en Licence/Master Data Science classique",
     type_etablissement:
       "Université (Faculté de Technologie) ou École Nationale Supérieure",
     parcours_master_ou_specialisation:
@@ -1167,7 +1168,7 @@ const SPECIALITES_DATA = [
       "Techniques Mathématiques",
     ],
     moyenne_indicative_orientation:
-      "Variable : ≈10-13/20 en université classique, jusqu'à 16-17/20 dans les grandes écoles (ex. pôle Sidi Abdallah pour IA/Cybersécurité/Maths)",
+      "Variable : ≈10-13/20 en université classique ; ≈16-17/20 pour les écoles nationales spécialisées (Technologies Avancées, Systèmes Autonomes, Nanosciences) ; ≈17/20 minimum (jusqu'à ≈18,5/20 en pratique) pour les écoles d'excellence IA/Cybersécurité/Informatique du pôle Sidi Abdallah",
     type_etablissement:
       "Université (Faculté de Technologie) ou École Nationale Supérieure",
     parcours_master_ou_specialisation:
@@ -1222,7 +1223,7 @@ const SPECIALITES_DATA = [
       "Techniques Mathématiques",
     ],
     moyenne_indicative_orientation:
-      "≈17/20 à l'École Nationale Supérieure de Cybersécurité (Sidi Abdallah) ; sinon ≈10-13/20 en Master Cybersécurité classique",
+      "≈17/20 minimum à l'École Supérieure de Cybersécurité (Sidi Abdallah) ; admission réelle ≈18,3/20 en 2025 ; sinon ≈10-13/20 en Master Cybersécurité classique",
     type_etablissement:
       "Université (Faculté de Technologie) ou École Nationale Supérieure",
     parcours_master_ou_specialisation:
@@ -1276,7 +1277,7 @@ const SPECIALITES_DATA = [
       "Techniques Mathématiques",
     ],
     moyenne_indicative_orientation:
-      "Variable : ≈10-13/20 en université classique, jusqu'à 16-17/20 dans les grandes écoles (ex. pôle Sidi Abdallah pour IA/Cybersécurité/Maths)",
+      "Variable : ≈10-13/20 en université classique ; ≈16-17/20 pour les écoles nationales spécialisées (Technologies Avancées, Systèmes Autonomes, Nanosciences) ; ≈17/20 minimum (jusqu'à ≈18,5/20 en pratique) pour les écoles d'excellence IA/Cybersécurité/Informatique du pôle Sidi Abdallah",
     type_etablissement:
       "Université (Faculté de Technologie) ou École Nationale Supérieure",
     parcours_master_ou_specialisation:
@@ -1330,7 +1331,7 @@ const SPECIALITES_DATA = [
       "Techniques Mathématiques",
     ],
     moyenne_indicative_orientation:
-      "Variable : ≈10-13/20 en université classique, jusqu'à 16-17/20 dans les grandes écoles (ex. pôle Sidi Abdallah pour IA/Cybersécurité/Maths)",
+      "Variable : ≈10-13/20 en université classique ; ≈16-17/20 pour les écoles nationales spécialisées (Technologies Avancées, Systèmes Autonomes, Nanosciences) ; ≈17/20 minimum (jusqu'à ≈18,5/20 en pratique) pour les écoles d'excellence IA/Cybersécurité/Informatique du pôle Sidi Abdallah",
     type_etablissement:
       "Université (Faculté de Technologie) ou École Nationale Supérieure",
     parcours_master_ou_specialisation:
@@ -1380,7 +1381,7 @@ const SPECIALITES_DATA = [
       "Techniques Mathématiques",
     ],
     moyenne_indicative_orientation:
-      "Variable : ≈10-13/20 en université classique, jusqu'à 16-17/20 dans les grandes écoles (ex. pôle Sidi Abdallah pour IA/Cybersécurité/Maths)",
+      "Variable : ≈10-13/20 en université classique ; ≈16-17/20 pour les écoles nationales spécialisées (Technologies Avancées, Systèmes Autonomes, Nanosciences) ; ≈17/20 minimum (jusqu'à ≈18,5/20 en pratique) pour les écoles d'excellence IA/Cybersécurité/Informatique du pôle Sidi Abdallah",
     type_etablissement:
       "Université (Faculté de Technologie) ou École Nationale Supérieure",
     parcours_master_ou_specialisation:
@@ -1431,7 +1432,7 @@ const SPECIALITES_DATA = [
       "Techniques Mathématiques",
     ],
     moyenne_indicative_orientation:
-      "Variable : ≈10-13/20 en université classique, jusqu'à 16-17/20 dans les grandes écoles (ex. pôle Sidi Abdallah pour IA/Cybersécurité/Maths)",
+      "Variable : ≈10-13/20 en université classique ; ≈16-17/20 pour les écoles nationales spécialisées (Technologies Avancées, Systèmes Autonomes, Nanosciences) ; ≈17/20 minimum (jusqu'à ≈18,5/20 en pratique) pour les écoles d'excellence IA/Cybersécurité/Informatique du pôle Sidi Abdallah",
     type_etablissement:
       "Université (Faculté de Technologie) ou École Nationale Supérieure",
     parcours_master_ou_specialisation:
@@ -1480,7 +1481,7 @@ const SPECIALITES_DATA = [
       "Techniques Mathématiques",
     ],
     moyenne_indicative_orientation:
-      "Variable : ≈10-13/20 en université classique, jusqu'à 16-17/20 dans les grandes écoles (ex. pôle Sidi Abdallah pour IA/Cybersécurité/Maths)",
+      "≈16/20 (École Nationale Supérieure des Systèmes Autonomes, pôle Sidi Abdallah)",
     type_etablissement:
       "Université (Faculté de Technologie) ou École Nationale Supérieure",
     parcours_master_ou_specialisation:
@@ -1533,7 +1534,7 @@ const SPECIALITES_DATA = [
       "Techniques Mathématiques",
     ],
     moyenne_indicative_orientation:
-      "Variable : ≈10-13/20 en université classique, jusqu'à 16-17/20 dans les grandes écoles (ex. pôle Sidi Abdallah pour IA/Cybersécurité/Maths)",
+      "≈16/20 (École Nationale Supérieure de Nanotechnologie et Nanosciences, pôle Sidi Abdallah)",
     type_etablissement:
       "Université (Faculté de Technologie) ou École Nationale Supérieure",
     parcours_master_ou_specialisation:
@@ -1582,7 +1583,7 @@ const SPECIALITES_DATA = [
       "Techniques Mathématiques",
     ],
     moyenne_indicative_orientation:
-      "Variable : ≈10-13/20 en université classique, jusqu'à 16-17/20 dans les grandes écoles (ex. pôle Sidi Abdallah pour IA/Cybersécurité/Maths)",
+      "≈16/20 (École Nationale Supérieure des Technologies Avancées, Alger)",
     type_etablissement:
       "Université (Faculté de Technologie) ou École Nationale Supérieure",
     parcours_master_ou_specialisation:
