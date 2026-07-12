@@ -141,27 +141,9 @@ function terminerTeaser(avecSuggestion) {
   }
 
   rechercheForm.scrollIntoView({ behavior: "smooth", block: "start" });
-
-  try {
-    localStorage.setItem("wejehni_teaser_vu", "1");
-  } catch (e) {
-    // stockage indisponible (navigation privée, etc.) : sans conséquence
-  }
 }
 
 teaserSkipBtn.addEventListener("click", () => terminerTeaser(false));
 
-// Ne pas ré-imposer le quiz à un visiteur qui l'a déjà vu sur ce navigateur
-let dejaVu = false;
-try {
-  dejaVu = localStorage.getItem("wejehni_teaser_vu") === "1";
-} catch (e) {
-  dejaVu = false;
-}
-
-if (dejaVu) {
-  teaserSection.hidden = true;
-  rechercheForm.hidden = false;
-} else {
-  afficherQuestionTeaser();
-}
+// Le quiz s'affiche à chaque ouverture du site (pas de mémorisation entre visites).
+afficherQuestionTeaser();
