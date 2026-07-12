@@ -2,13 +2,86 @@
 // Même logique : score = 0.55 * correspondance_mots_cles + 0.45 * similarite_tfidf
 
 const MOTS_VIDES_FR = new Set([
-  "le","la","les","un","une","des","de","du","et","ou","a","au","aux",
-  "en","dans","pour","par","sur","avec","sans","ce","ces","cette","cet",
-  "je","tu","il","elle","on","nous","vous","ils","elles","mon","ma","mes",
-  "ton","ta","tes","son","sa","ses","que","qui","quoi","dont","est",
-  "suis","es","sont","etre","avoir","ai","as","avons","avez","ont",
-  "plutot","plus","moins","tres","bien","aussi","comme","si","mais","donc",
-  "car","ne","pas","n","l","d","s","j","c","qu","aime","aimer","aimerais",
+  "le",
+  "la",
+  "les",
+  "un",
+  "une",
+  "des",
+  "de",
+  "du",
+  "et",
+  "ou",
+  "a",
+  "au",
+  "aux",
+  "en",
+  "dans",
+  "pour",
+  "par",
+  "sur",
+  "avec",
+  "sans",
+  "ce",
+  "ces",
+  "cette",
+  "cet",
+  "je",
+  "tu",
+  "il",
+  "elle",
+  "on",
+  "nous",
+  "vous",
+  "ils",
+  "elles",
+  "mon",
+  "ma",
+  "mes",
+  "ton",
+  "ta",
+  "tes",
+  "son",
+  "sa",
+  "ses",
+  "que",
+  "qui",
+  "quoi",
+  "dont",
+  "est",
+  "suis",
+  "es",
+  "sont",
+  "etre",
+  "avoir",
+  "ai",
+  "as",
+  "avons",
+  "avez",
+  "ont",
+  "plutot",
+  "plus",
+  "moins",
+  "tres",
+  "bien",
+  "aussi",
+  "comme",
+  "si",
+  "mais",
+  "donc",
+  "car",
+  "ne",
+  "pas",
+  "n",
+  "l",
+  "d",
+  "s",
+  "j",
+  "c",
+  "qu",
+  "aime",
+  "aimer",
+  "aimerais",
 ]);
 
 function normaliser(texte) {
@@ -53,17 +126,20 @@ function texteDescriptifComplet(sp) {
 // --- Mini TF-IDF + similarité cosinus (équivalent de sklearn, unigrammes+bigrammes) ---
 function tokenizeForTfidf(texteNorm) {
   const mots = (texteNorm.match(/[a-z0-9]+(?:-[a-z0-9]+)*/g) || []).filter(
-    (m) => !MOTS_VIDES_FR.has(m)
+    (m) => !MOTS_VIDES_FR.has(m),
   );
   const grams = [...mots];
-  for (let i = 0; i < mots.length - 1; i++) grams.push(mots[i] + " " + mots[i + 1]);
+  for (let i = 0; i < mots.length - 1; i++)
+    grams.push(mots[i] + " " + mots[i + 1]);
   return grams;
 }
 
 class MoteurRecommandation {
   constructor(specialites) {
     this.specialites = specialites;
-    const corpusTokens = specialites.map((s) => tokenizeForTfidf(texteDescriptifComplet(s)));
+    const corpusTokens = specialites.map((s) =>
+      tokenizeForTfidf(texteDescriptifComplet(s)),
+    );
 
     // Vocabulaire + document frequency
     const df = new Map();
@@ -72,14 +148,18 @@ class MoteurRecommandation {
     });
     const N = specialites.length;
     this.idf = new Map();
-    df.forEach((freq, term) => this.idf.set(term, Math.log((1 + N) / (1 + freq)) + 1));
+    df.forEach((freq, term) =>
+      this.idf.set(term, Math.log((1 + N) / (1 + freq)) + 1),
+    );
 
     // Vecteurs TF-IDF normalisés (L2) pour chaque spécialité
     this.vecteurs = corpusTokens.map((tokens) => {
       const tf = new Map();
       tokens.forEach((t) => tf.set(t, (tf.get(t) || 0) + 1));
       const vec = new Map();
-      tf.forEach((count, term) => vec.set(term, count * (this.idf.get(term) || 0)));
+      tf.forEach((count, term) =>
+        vec.set(term, count * (this.idf.get(term) || 0)),
+      );
       let norm = 0;
       vec.forEach((v) => (norm += v * v));
       norm = Math.sqrt(norm) || 1;
@@ -116,11 +196,16 @@ class MoteurRecommandation {
     const scores = [];
     const phrasesTrouvees = [];
     this.specialites.forEach((sp) => {
-      const phrases = phrasesMotsCles(sp).map((p) => ({ orig: p, tokens: decouperEnTokens(p) }));
+      const phrases = phrasesMotsCles(sp).map((p) => ({
+        orig: p,
+        tokens: decouperEnTokens(p),
+      }));
       const matches = new Set();
       const phrasesMatchees = [];
       phrases.forEach((ph) => {
-        const touche = ph.tokens.some((t) => tokensUtilisateur.some((u) => motsProches(u, t)));
+        const touche = ph.tokens.some((t) =>
+          tokensUtilisateur.some((u) => motsProches(u, t)),
+        );
         if (touche) phrasesMatchees.push(ph.orig);
         ph.tokens.forEach((t) => {
           tokensUtilisateur.forEach((u) => {
@@ -128,7 +213,9 @@ class MoteurRecommandation {
           });
         });
       });
-      const score = tokensUtilisateur.length ? matches.size / tokensUtilisateur.length : 0;
+      const score = tokensUtilisateur.length
+        ? matches.size / tokensUtilisateur.length
+        : 0;
       scores.push(score);
       phrasesTrouvees.push(phrasesMatchees);
     });
@@ -144,9 +231,18 @@ class MoteurRecommandation {
     return false;
   }
 
-  recommander(texteUtilisateur, { serieBac = null, topN = 6, poidsMotsCles = 0.55, poidsSimilarite = 0.45 } = {}) {
+  recommander(
+    texteUtilisateur,
+    {
+      serieBac = null,
+      topN = 6,
+      poidsMotsCles = 0.55,
+      poidsSimilarite = 0.45,
+    } = {},
+  ) {
     const tokensUtilisateur = decouperEnTokens(texteUtilisateur);
-    const { scores: scoresMc, phrasesTrouvees } = this._scoreMotsCles(tokensUtilisateur);
+    const { scores: scoresMc, phrasesTrouvees } =
+      this._scoreMotsCles(tokensUtilisateur);
     const vecReq = this._vecteurRequete(texteUtilisateur);
     const scoresSim = this.vecteurs.map((v) => this._cosine(vecReq, v));
 

@@ -1,177 +1,167 @@
-const moteur = new MoteurRecommandation(SPECIALITES_DATA);
+// --- Teaser : mini-quiz de 3 questions pour amorcer un premier choix de mots ---
+// Purement indicatif : il ne fait qu'une pré-sélection de quelques mots dans le
+// pool complet ci-dessous. Le vrai calcul de recommandation reste inchangé et
+// se base uniquement sur les mots réellement sélectionnés dans le pool.
 
-const form = document.getElementById("recherche");
-const resultatsSection = document.getElementById("resultats");
-const resultatsListe = document.getElementById("resultats-liste");
-const resultatsTitre = document.getElementById("resultats-titre");
-const resultatsSousTitre = document.getElementById("resultats-sous-titre");
-const etatVide = document.getElementById("etat-vide");
-const tplCarte = document.getElementById("tpl-carte");
-const poolContainer = document.getElementById("pool-motscles");
-const filtreInput = document.getElementById("filtre-mots");
-const poolVideMsg = document.getElementById("pool-vide");
-const selectionCount = document.getElementById("selection-count");
-const selectionChips = document.getElementById("selection-chips");
-const btnChercher = document.getElementById("btn-chercher");
+const CLUSTER_MOTS = {
+  sante: [
+    "soigner",
+    "sauver des vies",
+    "hôpital",
+    "urgence médicale",
+    "kinésithérapie",
+    "handicap",
+  ],
+  tech: [
+    "coder",
+    "intelligence artificielle",
+    "robotique",
+    "développement logiciel",
+    "drones",
+    "sécurité informatique",
+  ],
+  nature: [
+    "agriculture",
+    "nature",
+    "biotechnologie",
+    "laboratoire",
+    "génétique",
+    "écosystèmes",
+  ],
+  gestion: [
+    "gestion",
+    "commerce",
+    "finance",
+    "marketing",
+    "justice",
+    "droits humains",
+  ],
+  arts: [
+    "design",
+    "dessin",
+    "architecture",
+    "création visuelle",
+    "langues étrangères",
+    "littérature",
+  ],
+};
 
-const SEUIL_SCORE_MINIMUM = 2.0;
-const motsSelectionnes = new Set();
+const TEASER_QUESTIONS = [
+  {
+    question: "بشكل عام، أي نشاط يجذبك أكثر؟",
+    options: [
+      { label: "مساعدة الناس ورعاية صحتهم", poids: { sante: 2 } },
+      { label: "ابتكار حلول تقنية ورقمية", poids: { tech: 2 } },
+      { label: "تسيير الأعمال أو الدفاع عن الحقوق", poids: { gestion: 2 } },
+      { label: "التعبير الفني أو الكتابة", poids: { arts: 2 } },
+    ],
+  },
+  {
+    question: "تفضل قضاء وقتك في:",
+    options: [
+      { label: "التعامل المباشر مع الناس", poids: { sante: 1, gestion: 1 } },
+      { label: "التجربة في المخبر أو الطبيعة", poids: { nature: 2 } },
+      { label: "البرمجة أو استعمال الأجهزة", poids: { tech: 2 } },
+      { label: "الرسم أو تعلم لغة جديدة", poids: { arts: 2 } },
+    ],
+  },
+  {
+    question: "ما الذي يهمك أكثر في مستقبلك المهني؟",
+    options: [
+      { label: "إنقاذ ومساعدة الآخرين", poids: { sante: 2 } },
+      { label: "الاستقرار المالي والتسيير", poids: { gestion: 2 } },
+      { label: "الابتكار والتكنولوجيا", poids: { tech: 2 } },
+      { label: "الطبيعة أو الإبداع الفني", poids: { nature: 1, arts: 1 } },
+    ],
+  },
+];
 
-// --- Construction du pool de mots-clés (plat, sans regroupement par domaine) ---
-// Les mots restent volontairement non associés à un domaine/spécialité dans l'UI :
-// seul le moteur de scoring établit ce lien, au moment de la recherche.
-const TOUS_LES_MOTS = [...new Set(GROUPES_MOTSCLES.flatMap((g) => g.mots))].sort((a, b) =>
-  a.localeCompare(b, "fr", { sensitivity: "base" })
-);
+const teaserSection = document.getElementById("teaser");
+const teaserQuestionEl = document.getElementById("teaser-question");
+const teaserOptionsEl = document.getElementById("teaser-options");
+const teaserSkipBtn = document.getElementById("teaser-skip");
+const teaserDots = [...document.querySelectorAll(".teaser__dot")];
+const rechercheForm = document.getElementById("recherche");
+const suggestionNote = document.getElementById("suggestion-note");
 
-const chipsParMot = new Map();
+let etapeActuelle = 0;
+const scoresCluster = { sante: 0, tech: 0, nature: 0, gestion: 0, arts: 0 };
 
-TOUS_LES_MOTS.forEach((mot) => {
-  const chip = document.createElement("button");
-  chip.type = "button";
-  chip.className = "chip-mot";
-  chip.textContent = mot;
-  chip.addEventListener("click", () => toggleMot(mot, chip));
-  poolContainer.appendChild(chip);
-  chipsParMot.set(mot, chip);
-});
-
-filtreInput.addEventListener("input", () => {
-  const requete = filtreInput.value.trim().toLowerCase();
-  let visibles = 0;
-  chipsParMot.forEach((chip, mot) => {
-    const correspond = mot.toLowerCase().includes(requete);
-    chip.classList.toggle("masque", !correspond);
-    if (correspond) visibles += 1;
+function afficherQuestionTeaser() {
+  const q = TEASER_QUESTIONS[etapeActuelle];
+  teaserQuestionEl.textContent = q.question;
+  teaserOptionsEl.innerHTML = "";
+  q.options.forEach((opt) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "teaser__option";
+    btn.textContent = opt.label;
+    btn.addEventListener("click", () => repondreTeaser(opt.poids));
+    teaserOptionsEl.appendChild(btn);
   });
-  poolVideMsg.hidden = visibles > 0;
-});
+  teaserDots.forEach((dot, i) =>
+    dot.classList.toggle("actif", i === etapeActuelle),
+  );
+}
 
-function toggleMot(mot, chipEl) {
-  if (motsSelectionnes.has(mot)) {
-    motsSelectionnes.delete(mot);
-    chipEl.classList.remove("actif");
+function repondreTeaser(poids) {
+  Object.entries(poids).forEach(([cle, val]) => {
+    scoresCluster[cle] += val;
+  });
+  etapeActuelle += 1;
+  if (etapeActuelle < TEASER_QUESTIONS.length) {
+    afficherQuestionTeaser();
   } else {
-    motsSelectionnes.add(mot);
-    chipEl.classList.add("actif");
+    terminerTeaser(true);
   }
-  majResume();
 }
 
-function majResume() {
-  selectionCount.textContent = `${motsSelectionnes.size} كلمة مختارة`;
-  selectionChips.innerHTML = "";
-  motsSelectionnes.forEach((mot) => {
-    const chip = document.createElement("span");
-    chip.className = "chip-resume";
-    chip.innerHTML = `${mot} <button type="button" aria-label="إزالة ${mot}">×</button>`;
-    chip.querySelector("button").addEventListener("click", () => {
-      motsSelectionnes.delete(mot);
-      const original = chipsParMot.get(mot);
-      if (original) original.classList.remove("actif");
-      majResume();
+function meilleurCluster() {
+  return Object.entries(scoresCluster).sort((a, b) => b[1] - a[1])[0][0];
+}
+
+function terminerTeaser(avecSuggestion) {
+  teaserSection.hidden = true;
+  rechercheForm.hidden = false;
+
+  if (avecSuggestion) {
+    const cluster = meilleurCluster();
+    const motsSuggeres = CLUSTER_MOTS[cluster] || [];
+    let auMoinsUnAjout = false;
+    motsSuggeres.forEach((mot) => {
+      const chip = chipsParMot.get(mot);
+      if (chip && !motsSelectionnes.has(mot)) {
+        toggleMot(mot, chip);
+        auMoinsUnAjout = true;
+      }
     });
-    selectionChips.appendChild(chip);
-  });
-  btnChercher.disabled = motsSelectionnes.size === 0;
-}
-
-// --- Recherche ---
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
-  if (motsSelectionnes.size === 0) return;
-
-  const texte = [...motsSelectionnes].join(", ");
-  const bac = document.getElementById("bac").value || null;
-
-  const resultats = moteur.recommander(texte, { serieBac: bac, topN: 6 });
-  afficherResultats(resultats, [...motsSelectionnes]);
-  resultatsSection.scrollIntoView({ behavior: "smooth", block: "start" });
-});
-
-function afficherResultats(resultats, motsChoisis) {
-  etatVide.hidden = true;
-  resultatsSection.hidden = false;
-  resultatsListe.innerHTML = "";
-
-  const meilleur = resultats.length ? Math.max(...resultats.map((r) => r.scoreFinal)) : 0;
-
-  if (!resultats.length || meilleur < SEUIL_SCORE_MINIMUM) {
-    resultatsTitre.textContent = "لم نجد تطابقاً كافياً";
-    resultatsSousTitre.textContent = "جرّب اختيار كلمات أخرى، أو أضف المزيد من الكلمات من مجالات مختلفة.";
-    return;
+    if (auMoinsUnAjout && suggestionNote) {
+      suggestionNote.hidden = false;
+    }
   }
 
-  resultatsTitre.textContent = `${resultats.length} تخصصات مقترحة لك`;
-  resultatsSousTitre.textContent = `بناءً على: ${motsChoisis.join(" · ")}`;
+  rechercheForm.scrollIntoView({ behavior: "smooth", block: "start" });
 
-  resultats.forEach((r) => resultatsListe.appendChild(construireCarte(r)));
-}
-
-function construireCarte(r) {
-  const node = tplCarte.content.cloneNode(true);
-  const carte = node.querySelector(".carte");
-  const sp = r.specialite;
-
-  node.querySelector(".carte__domaine").textContent = sp.domaine;
-  node.querySelector(".carte__nom").textContent = sp.nom;
-  node.querySelector(".carte__score").textContent = `التوافق ${Math.round(r.scoreFinal)}/100`;
-  node.querySelector(".carte__desc").textContent = sp.description;
-
-  const chips = node.querySelector(".carte__chips");
-  r.motsClesTrouves.slice(0, 5).forEach((m) => {
-    const chip = document.createElement("span");
-    chip.className = "chip chip--mot";
-    chip.textContent = m;
-    chips.appendChild(chip);
-  });
-  if (r.bacCompatible === true) {
-    chips.appendChild(creerChip("✓ متوافق مع شعبتك", "chip--bac-oui"));
-  } else if (r.bacCompatible === false) {
-    chips.appendChild(creerChip("⚠ الشعبة غير مطلوبة لهذا التخصص", "chip--bac-non"));
+  try {
+    localStorage.setItem("wejehni_teaser_vu", "1");
+  } catch (e) {
+    // stockage indisponible (navigation privée, etc.) : sans conséquence
   }
-
-  const parcours = node.querySelector(".carte__parcours");
-  parcours.appendChild(creerEtape("البكالوريا", sp.filieres_bac_recommandees.join(" / "), sp.moyenne_indicative_orientation));
-  parcours.appendChild(creerEtape("النظام الجامعي", sp.systeme_universitaire, sp.duree_totale_indicative));
-  parcours.appendChild(creerEtape("التخصص / الماستر", sp.parcours_master_ou_specialisation, sp.type_etablissement));
-
-  const metiers = node.querySelector(".carte__metiers");
-  sp.debouches_metiers.forEach((m) => {
-    const div = document.createElement("div");
-    div.className = "metier";
-    const t = document.createElement("p");
-    t.className = "metier__titre";
-    t.textContent = m.titre;
-    const d = document.createElement("p");
-    d.className = "metier__desc";
-    d.textContent = m.description;
-    div.appendChild(t);
-    div.appendChild(d);
-    metiers.appendChild(div);
-  });
-
-  node.querySelector(".carte__toggle").addEventListener("click", () => {
-    carte.classList.toggle("ouvert");
-  });
-
-  return node;
 }
 
-function creerChip(texte, classe) {
-  const chip = document.createElement("span");
-  chip.className = `chip ${classe}`;
-  chip.textContent = texte;
-  return chip;
+teaserSkipBtn.addEventListener("click", () => terminerTeaser(false));
+
+// Ne pas ré-imposer le quiz à un visiteur qui l'a déjà vu sur ce navigateur
+let dejaVu = false;
+try {
+  dejaVu = localStorage.getItem("wejehni_teaser_vu") === "1";
+} catch (e) {
+  dejaVu = false;
 }
 
-function creerEtape(label, valeur, sous) {
-  const div = document.createElement("div");
-  div.className = "etape";
-  div.innerHTML = `
-    <p class="etape__label">${label}</p>
-    <p class="etape__valeur">${valeur}</p>
-    <p class="etape__sub">${sous}</p>
-  `;
-  return div;
+if (dejaVu) {
+  teaserSection.hidden = true;
+  rechercheForm.hidden = false;
+} else {
+  afficherQuestionTeaser();
 }
